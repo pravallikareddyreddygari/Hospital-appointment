@@ -13,12 +13,23 @@ interface SlotPickerProps {
 
 export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSelectTime }: SlotPickerProps) {
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    if (selectedDate) {
-      setBookedSlots(getBookedSlots(doctorId, selectedDate));
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (selectedDate && isClient) {
+      try {
+        const slots = getBookedSlots(doctorId, selectedDate);
+        setBookedSlots(slots);
+      } catch (error) {
+        console.error('Error fetching booked slots:', error);
+        setBookedSlots([]);
+      }
     }
-  }, [doctorId, selectedDate]);
+  }, [doctorId, selectedDate, isClient]);
 
   const getSlotPeriod = (time: string): string => {
     const hour = parseInt(time.split(':')[0]);
@@ -33,6 +44,14 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
     return (
       <div className="text-center py-8 text-slate-500">
         Please select a date to view available time slots
+      </div>
+    );
+  }
+
+  if (!isClient) {
+    return (
+      <div className="text-center py-8 text-slate-500">
+        Loading available slots...
       </div>
     );
   }
@@ -61,6 +80,7 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {timeSlots.map(time => {
           const isBooked = bookedSlots.includes(time);
+          const isSelected = selectedTime === time;
           
           return (
             <button
@@ -73,7 +93,7 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
               }}
               disabled={isBooked}
               className={`py-3 px-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-                selectedTime === time
+                isSelected
                   ? 'bg-teal-600 text-white shadow-lg'
                   : isBooked
                   ? 'bg-slate-100 text-slate-400 cursor-not-allowed line-through'
