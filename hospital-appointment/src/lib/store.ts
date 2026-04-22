@@ -14,10 +14,19 @@ export function getAppointments(): Appointment[] {
 export function saveAppointment(appointment: Omit<Appointment, 'id' | 'zoomLink' | 'zoomMeetingId' | 'createdAt'>, doctor: Doctor): Appointment {
   const appointments = getAppointments();
   const { link, meetingId } = generateZoomLink(`apt-${Date.now()}`);
+  const timestamp = Date.now();
   
   const newAppointment: Appointment = {
-    ...appointment,
-    id: `apt-${Date.now()}`,
+    id: `apt-${timestamp}`,
+    doctorId: appointment.doctorId,
+    doctorName: appointment.doctorName,
+    patientName: appointment.patientName,
+    patientEmail: appointment.patientEmail,
+    patientPhone: appointment.patientPhone,
+    date: appointment.date,
+    time: appointment.time,
+    status: appointment.status,
+    specialty: appointment.specialty,
     zoomLink: link,
     zoomMeetingId: meetingId,
     createdAt: new Date().toISOString(),
