@@ -1,0 +1,12 @@
+{
+  "name": "hospital-appointment-root",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd hospital-appointment && npm run dev",
+    "build": "cd hospital-appointment && npm run build",
+    "start": "cd hospital-appointment && npm run start",
+    "lint": "cd hospital-appointment && npm run lint"
+  }
+}
+
