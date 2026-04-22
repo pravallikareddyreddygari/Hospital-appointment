@@ -2,8 +2,5 @@
   "buildCommand": "cd hospital-appointment && npm run build",
   "installCommand": "cd hospital-appointment && npm install",
   "outputDirectory": "hospital-appointment/.next",
-  "framework": "nextjs",
-  "env": {
-    "NEXT_PUBLIC_APP_URL": "@app_url"
-  }
+  "framework": "nextjs"
 }
