@@ -2,6 +2,5 @@
   "buildCommand": "cd hospital-appointment && npm run build",
   "installCommand": "cd hospital-appointment && npm install",
   "outputDirectory": "hospital-appointment/.next",
-  "framework": "nextjs",
-  "nodeVersion": "20.x"
+  "framework": "nextjs"
 }
