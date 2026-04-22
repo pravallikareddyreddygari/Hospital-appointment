@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   reactStrictMode: true,
-  swcMinify: true,
   output: 'standalone',
 };
 
 export default nextConfig;
+
