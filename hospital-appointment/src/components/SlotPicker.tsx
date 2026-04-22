@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { timeSlots } from '@/lib/data';
-import { getBookedSlots, isSlotBooked } from '@/lib/store';
+import { getBookedSlots } from '@/lib/store';
 
 interface SlotPickerProps {
   doctorId: string;
@@ -13,23 +13,18 @@ interface SlotPickerProps {
 
 export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSelectTime }: SlotPickerProps) {
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (selectedDate && isClient) {
+    if (selectedDate && typeof window !== 'undefined') {
       try {
         const slots = getBookedSlots(doctorId, selectedDate);
-        setBookedSlots(slots);
+        setBookedSlots(slots || []);
       } catch (error) {
         console.error('Error fetching booked slots:', error);
         setBookedSlots([]);
       }
     }
-  }, [doctorId, selectedDate, isClient]);
+  }, [doctorId, selectedDate]);
 
   const getSlotPeriod = (time: string): string => {
     const hour = parseInt(time.split(':')[0]);
@@ -44,14 +39,6 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
     return (
       <div className="text-center py-8 text-slate-500">
         Please select a date to view available time slots
-      </div>
-    );
-  }
-
-  if (!isClient) {
-    return (
-      <div className="text-center py-8 text-slate-500">
-        Loading available slots...
       </div>
     );
   }
@@ -86,18 +73,19 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
             <button
               type="button"
               key={time}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 if (!isBooked) {
                   onSelectTime(time);
                 }
               }}
               disabled={isBooked}
-              className={`py-3 px-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+              className={`py-3 px-2 rounded-lg text-sm font-medium transition-all ${
                 isSelected
                   ? 'bg-teal-600 text-white shadow-lg'
                   : isBooked
                   ? 'bg-slate-100 text-slate-400 cursor-not-allowed line-through'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:border-teal-500 hover:text-teal-600'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:border-teal-500 hover:text-teal-600 cursor-pointer'
               }`}
             >
               {time}

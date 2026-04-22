@@ -1,14 +1,13 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { doctors, timeSlots } from '@/lib/data';
+import { doctors } from '@/lib/data';
 import SlotPicker from '@/components/SlotPicker';
 
 export default function BookingPage() {
   const params = useParams();
-  const router = useRouter();
   const doctorId = params.doctorId as string;
   const doctor = doctors.find(d => d.id === doctorId);
 
@@ -74,7 +73,7 @@ export default function BookingPage() {
     };
 
     const { saveAppointment } = await import('@/lib/store');
-    const newAppointment = saveAppointment(appointment, doctor);
+    saveAppointment(appointment, doctor);
 
     setIsSubmitting(false);
     setShowConfirmation(true);
