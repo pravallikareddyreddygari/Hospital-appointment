@@ -43,6 +43,11 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
     );
   }
 
+  const handleTimeClick = (time: string) => {
+    console.log('Time clicked:', time, 'Current selected:', selectedTime);
+    onSelectTime(time);
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-2 mb-4">
@@ -71,14 +76,9 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
           
           return (
             <button
-              type="button"
               key={time}
-              onClick={(e) => {
-                e.preventDefault();
-                if (!isBooked) {
-                  onSelectTime(time);
-                }
-              }}
+              type="button"
+              onClick={() => handleTimeClick(time)}
               disabled={isBooked}
               className={`py-3 px-2 rounded-lg text-sm font-medium transition-all ${
                 isSelected

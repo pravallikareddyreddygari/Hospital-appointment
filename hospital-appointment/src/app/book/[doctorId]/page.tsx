@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { doctors } from '@/lib/data';
@@ -18,6 +18,11 @@ export default function BookingPage() {
   const [patientPhone, setPatientPhone] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('Selected time updated:', selectedTime);
+  }, [selectedTime]);
 
   if (!doctor) {
     return (
