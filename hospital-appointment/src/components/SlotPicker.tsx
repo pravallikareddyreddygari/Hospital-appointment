@@ -66,9 +66,13 @@ export default function SlotPicker({ doctorId, selectedDate, selectedTime, onSel
             <button
               type="button"
               key={time}
-              onClick={() => !isBooked && onSelectTime(time)}
+              onClick={() => {
+                if (!isBooked) {
+                  onSelectTime(time);
+                }
+              }}
               disabled={isBooked}
-              className={`py-3 px-2 rounded-lg text-sm font-medium transition-all ${
+              className={`py-3 px-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                 selectedTime === time
                   ? 'bg-teal-600 text-white shadow-lg'
                   : isBooked
