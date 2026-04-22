@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { doctors, timeSlots } from '@/lib/data';
@@ -33,7 +33,7 @@ export default function BookingPage() {
     );
   }
 
-  const generateDateOptions = () => {
+  const dateOptions = useMemo(() => {
     const dates = [];
     const today = new Date();
     for (let i = 0; i < 14; i++) {
@@ -42,7 +42,7 @@ export default function BookingPage() {
       dates.push(date.toISOString().split('T')[0]);
     }
     return dates;
-  };
+  }, []);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -185,7 +185,7 @@ export default function BookingPage() {
                 <div className="space-y-4">
                   <h3 className="font-semibold text-slate-800">1. Select Date</h3>
                   <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
-                    {generateDateOptions().map(date => (
+                    {dateOptions.map(date => (
                       <button
                         type="button"
                         key={date}
