@@ -1,18 +1,25 @@
 'use client';
 
-import { Suspense, useState, useMemo } from 'react';
+import { Suspense, useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { doctors, specialties } from '@/lib/data';
 import DoctorCard from '@/components/DoctorCard';
 
 function DoctorsContent() {
   const searchParams = useSearchParams();
-  const initialSpecialty = searchParams.get('specialty') || 'All';
-  const initialSearch = searchParams.get('search') || '';
-
-  const [searchTerm, setSearchTerm] = useState(initialSearch);
-  const [selectedSpecialty, setSelectedSpecialty] = useState(initialSpecialty);
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSpecialty, setSelectedSpecialty] = useState('All');
   const [sortBy, setSortBy] = useState<'rating' | 'experience' | 'fee'>('rating');
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const specialty = searchParams.get('specialty') || 'All';
+    const search = searchParams.get('search') || '';
+    setSelectedSpecialty(specialty);
+    setSearchTerm(search);
+  }, [searchParams]);
 
   const filteredDoctors = useMemo(() => {
     let result = doctors;
@@ -60,6 +67,7 @@ function DoctorsContent() {
                 placeholder="Search doctors by name or specialty..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                suppressHydrationWarning
                 className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
@@ -69,6 +77,7 @@ function DoctorsContent() {
             <select
               value={selectedSpecialty}
               onChange={(e) => setSelectedSpecialty(e.target.value)}
+              suppressHydrationWarning
               className="px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white min-w-[160px]"
             >
               {specialties.map(specialty => (
@@ -81,6 +90,7 @@ function DoctorsContent() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'rating' | 'experience' | 'fee')}
+              suppressHydrationWarning
               className="px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white min-w-[140px]"
             >
               <option value="rating">Sort by Rating</option>
